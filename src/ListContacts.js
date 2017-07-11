@@ -1,15 +1,17 @@
-import React, { Component } from 'react'
+/* 
+	NOTICE: Removed { Components } import directive
+			Added PropTypes import directive
+*/
+import React from 'react'
+import PropTypes from 'prop-types'
 
 function ListContacts (props) {
 	/*
-		Arrow function will be invoked on button click 
-		which invokes the onDeleteContact method (App.js)
-		passing it the specific contact that we're iterating over
-		Stack Trace: 
-			Button Click
-			onDeleteContact(contact)
-			removeContact
-			Filter removes the specific contact
+		(Prop-types Example)
+			Component: <ListContacts onDeleteContact={this.removeContact} contacts={{}} />
+			This would cause problems in our map function because 
+			props.contact would no longer be an array 
+				ie., props.contacts.map(() => { }) would fail
 	*/
     return (
 		<ol className='contact-list'>
@@ -29,6 +31,22 @@ function ListContacts (props) {
             ))}
 		</ol>
     )
+}
+
+/*
+	Using PropTypes:
+		- Specified the expected type of our prop
+		- Made it required for use by everyone
+
+	Warnings shown in console:
+		- Warning:  Failed prop type: Invalid prop `contacts` of type `object` supplied to `ListContacts`, expected `array`.
+    				in ListContacts (at App.js:39)
+    				in App (at index.js:7)
+    	- Uncaught TypeError: props.contacts.map is not a function
+*/
+ListContacts.propTypes = {
+	contacts: PropTypes.array.isRequired,
+	onDeleteContact: PropTypes.func.isRequired
 }
 
 export default ListContacts
