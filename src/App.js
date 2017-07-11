@@ -1,9 +1,6 @@
 import React, { Component } from 'react'
 import ListContacts from './ListContacts'
 
-/* 
-    Debugging with prop-types example
-*/
 class App extends Component {
     state = {
         contacts: [
@@ -34,13 +31,6 @@ class App extends Component {
     }
     render() {
         return (
-            /* 
-                Question: What would happen if an object was accidentally passed to the contacts prop?
-                Answer: The map function would throw an error because it only works if given an array
-                        and many hours would be spent debugging the application
-
-                Component: <ListContacts onDeleteContact={this.removeContact} contacts={{ }} />
-            */ 
             <div>
                 <ListContacts onDeleteContact={this.removeContact} contacts={this.state.contacts} />
             </div>
