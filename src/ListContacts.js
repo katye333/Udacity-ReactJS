@@ -19,39 +19,38 @@ class ListContacts extends Component {
 	state = {
 		query: ''
 	}
-
-	/*
-		
-	*/
 	updateQuery = (query) => {
 		this.setState({ query: query.trim() })
 	}
 
+	/* 
+		Resets the input state to blank
+	*/
+	clearQuery = () => {
+		this.setState({ query: '' })
+	}
+
 	render () {
-		/*
-			If there are any special characters inside of query,
-			escape them now so we'll be able to use those special
-			characters as a string literal rather than regexp chars
-			i = not case sensitive
-		*/
+		// Creates variables named contacts, onDeleteContact, query
+		// instead of writing out this.props.contacts, etc 
+		const { contacts, onDeleteContact } = this.props
+		const { query } = this.state
+
 		let showingContacts
 		if (this.state.query) {
 			const match = new RegExp(escapeRegExp(this.state.query), 'i')
-
-			// Added to the array if current state contains something also in 
-			// one of our contact people's names
 			showingContacts = this.props.contacts.filter((contact) => match.test(contact.name))
 		} 
 		else {
 			showingContacts = this.props.contacts;
 		}
-
-		// Always render contacts in alphabetical order
 		showingContacts.sort(sortBy('name'))
  
-		// Filtered array of contacts based on the input state 
-		// should replace this.props.contacts in map function 
-		// in order to show only those contacts who should be visible
+ 		/* 
+ 			If showingContacts.length and contacts.length are not the same length
+ 			execute a function (shorthand) that will display a counter variable 
+ 			with the number of matching contacts on the screen
+ 		*/
 	    return (
 	    	<div className='list-contacts'>
 	    		<div className='list-contacts-top'>
@@ -63,6 +62,13 @@ class ListContacts extends Component {
 	    				onChange={(event) => this.updateQuery(event.target.value)}
 	    			/>
 	    		</div>
+
+	    		{showingContacts.length !== contacts.length && (
+	    			<div className='showing-contacts'>
+	    				<span>Now showing {showingContacts.length} of {contacts.length} total</span>
+	    				<button onClick={this.clearQuery}>Show All</button>
+	    			</div>
+	    		)}
 	    	
 				<ol className='contact-list'>
 		            {showingContacts.map((contact) => (
@@ -74,7 +80,7 @@ class ListContacts extends Component {
 								<p>{contact.name}</p>
 								<p>{contact.email}</p>
 							</div>
-							<button onClick={() => this.props.onDeleteContact(contact)} className='contact-remove'>
+							<button onClick={() => onDeleteContact(contact)} className='contact-remove'>
 								Remove
 							</button>
 						</li>
