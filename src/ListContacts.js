@@ -1,12 +1,14 @@
+/* 
+	Import the regex and sorting packages for
+	filtering matching strings from input field
+*/
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import escapeRegExp from 'escape-string-regexp'
+import sortBy from 'sort-by'
 
 /*
-	Controlled component used here because we need the UI 
-	to update when the state of the input field is changed
-		Therefore, a stateless functional component 
-		would not work in this situation so a class
-		component is required to take its place.
+	Implementing fuzzy search
 */
 class ListContacts extends Component {
 	static propTypes = {
@@ -19,10 +21,7 @@ class ListContacts extends Component {
 	}
 
 	/*
-		Object setState()
-			The new state of the input field
-			doesn't depend on the previous state
-			so we can just pass an object to it
+		
 	*/
 	updateQuery = (query) => {
 		this.setState({ query: query.trim() })
@@ -30,15 +29,31 @@ class ListContacts extends Component {
 
 	render () {
 		/*
-			Typing into the input field -->
-			Invokes onChange function --> 
-			Invokes updateQuery passing it the new string -->
-			Updates our state -->
-			Updates the specific value of our input field 
+			If there are any special characters inside of query,
+			escape them now so we'll be able to use those special
+			characters as a string literal rather than regexp chars
+			i = not case sensitive
 		*/
+		let showingContacts
+		if (this.state.query) {
+			const match = new RegExp(escapeRegExp(this.state.query), 'i')
+
+			// Added to the array if current state contains something also in 
+			// one of our contact people's names
+			showingContacts = this.props.contacts.filter((contact) => match.test(contact.name))
+		} 
+		else {
+			showingContacts = this.props.contacts;
+		}
+
+		// Always render contacts in alphabetical order
+		showingContacts.sort(sortBy('name'))
+ 
+		// Filtered array of contacts based on the input state 
+		// should replace this.props.contacts in map function 
+		// in order to show only those contacts who should be visible
 	    return (
 	    	<div className='list-contacts'>
-	    		{JSON.stringify(this.state)}
 	    		<div className='list-contacts-top'>
 	    			<input
 	    				className='search-contacts'
@@ -50,7 +65,7 @@ class ListContacts extends Component {
 	    		</div>
 	    	
 				<ol className='contact-list'>
-		            {this.props.contacts.map((contact) => (
+		            {showingContacts.map((contact) => (
 						<li key={contact.id} className='contact-list-item'>
 							<div className='contact-avatar' style={{
 		                        backgroundImage: `url(${contact.avatarURL})`
@@ -69,10 +84,4 @@ class ListContacts extends Component {
 	    )
 	}
 }
-
-ListContacts.propTypes = {
-	contacts: PropTypes.array.isRequired,
-	onDeleteContact: PropTypes.func.isRequired
-}
-
 export default ListContacts
