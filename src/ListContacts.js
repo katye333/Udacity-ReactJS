@@ -1,14 +1,8 @@
-/* 
-
-*/
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import escapeRegExp from 'escape-string-regexp'
 import sortBy from 'sort-by'
 
-/*
-	
-*/
 class ListContacts extends Component {
 	static propTypes = {
 		contacts: PropTypes.array.isRequired,
@@ -22,9 +16,6 @@ class ListContacts extends Component {
 		this.setState({ query: query.trim() })
 	}
 
-	/* 
-		
-	*/
 	clearQuery = () => {
 		this.setState({ query: '' })
 	}
@@ -42,10 +33,7 @@ class ListContacts extends Component {
 			showingContacts = this.props.contacts;
 		}
 		showingContacts.sort(sortBy('name'))
- 
- 		/* 
- 		
- 		*/
+
 	    return (
 	    	<div className='list-contacts'>
 	    		<div className='list-contacts-top'>
@@ -56,6 +44,13 @@ class ListContacts extends Component {
 	    				value={this.state.query}
 	    				onChange={(event) => this.updateQuery(event.target.value)}
 	    			/>
+
+	    			<a 
+	    				href='#create' 
+	    				className='add-contact' 
+	    				onClick={this.props.onNavigate}>
+	    				Add Contact
+	    			</a>
 	    		</div>
 
 	    		{showingContacts.length !== contacts.length && (
@@ -75,7 +70,9 @@ class ListContacts extends Component {
 								<p>{contact.name}</p>
 								<p>{contact.email}</p>
 							</div>
-							<button onClick={() => onDeleteContact(contact)} className='contact-remove'>
+							<button 
+								onClick={() => onDeleteContact(contact)} 
+								className='contact-remove'>
 								Remove
 							</button>
 						</li>
