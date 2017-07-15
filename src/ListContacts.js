@@ -1,6 +1,5 @@
 /* 
-	Import the regex and sorting packages for
-	filtering matching strings from input field
+
 */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
@@ -8,7 +7,7 @@ import escapeRegExp from 'escape-string-regexp'
 import sortBy from 'sort-by'
 
 /*
-	Implementing fuzzy search
+	
 */
 class ListContacts extends Component {
 	static propTypes = {
@@ -24,15 +23,13 @@ class ListContacts extends Component {
 	}
 
 	/* 
-		Resets the input state to blank
+		
 	*/
 	clearQuery = () => {
 		this.setState({ query: '' })
 	}
 
 	render () {
-		// Creates variables named contacts, onDeleteContact, query
-		// instead of writing out this.props.contacts, etc 
 		const { contacts, onDeleteContact } = this.props
 		const { query } = this.state
 
@@ -47,9 +44,7 @@ class ListContacts extends Component {
 		showingContacts.sort(sortBy('name'))
  
  		/* 
- 			If showingContacts.length and contacts.length are not the same length
- 			execute a function (shorthand) that will display a counter variable 
- 			with the number of matching contacts on the screen
+ 		
  		*/
 	    return (
 	    	<div className='list-contacts'>
