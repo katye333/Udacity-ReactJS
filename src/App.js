@@ -22,26 +22,31 @@ class App extends Component {
         ContactsAPI.remove(contact)
     }
 
-    /*
-        Using render in the ListContacts Route 
-        because we are passing it some props 
-        
-        The second Route doesn't need to use render
-        because we are simply inserting our base
-        component, rather than also adding props
+    createContact(contact) {
+        ContactsAPI.create(contact).then(contact => {
+            this.setState(state => ({
+                contacts: state.contacts.concat([ contact ])
+            }))
+        })
+    }
 
-        We can remove all instances of the screen state
-    */
     render() {
         return (
-            <div className='app'>
+            <div>
                 <Route exact path='/' render={() => (
                     <ListContacts 
-                        contacts={this.state.contacts}
                         onDeleteContact={this.removeContact} 
+                        contacts={this.state.contacts}
                     />
-                )}/>
-                <Route path='/create' component={CreateContact} />
+                )} />
+                <Route path='/create' render={({ history }) => (
+                    <CreateContact 
+                        onCreateContact={(contact) => {
+                            this.createContact(contact)
+                            history.push('/')
+                        }}
+                    />
+                )} />
             </div>
         )
     }
