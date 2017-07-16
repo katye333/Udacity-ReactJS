@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
+import { Route } from 'react-router-dom'
 import ListContacts from './ListContacts'
 import CreateContact from './CreateContact'
 import * as ContactsAPI from './utils/ContactsAPI'
 
 class App extends Component {
     state = {
-        screen: 'list', // list, create
         contacts: []
     }
 
@@ -21,21 +21,27 @@ class App extends Component {
 
         ContactsAPI.remove(contact)
     }
+
+    /*
+        Using render in the ListContacts Route 
+        because we are passing it some props 
+        
+        The second Route doesn't need to use render
+        because we are simply inserting our base
+        component, rather than also adding props
+
+        We can remove all instances of the screen state
+    */
     render() {
         return (
-            <div>
-                {this.state.screen === 'list' && (
+            <div className='app'>
+                <Route exact path='/' render={() => (
                     <ListContacts 
                         contacts={this.state.contacts}
                         onDeleteContact={this.removeContact} 
-                        onNavigate={() => {
-                            this.setState({ screen: 'create' })
-                        }}
                     />
-                )}
-                {this.state.screen === 'create' && (
-                    <CreateContact/>
-                )}
+                )}/>
+                <Route path='/create' component={CreateContact} />
             </div>
         )
     }
