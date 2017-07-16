@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
+import { Link } from 'react-router-dom' 
 import PropTypes from 'prop-types'
 import escapeRegExp from 'escape-string-regexp'
 import sortBy from 'sort-by'
 
-class ListContacts extends Component {
+class ListContacts extends React.Component {
 	static propTypes = {
 		contacts: PropTypes.array.isRequired,
 		onDeleteContact: PropTypes.func.isRequired
@@ -34,6 +35,12 @@ class ListContacts extends Component {
 		}
 		showingContacts.sort(sortBy('name'))
 
+		/*
+			Link components do not have a href property
+			nor do we need to mimic a react router using
+			the states from the last part
+			On link clicked, the url will update to /create
+		*/
 	    return (
 	    	<div className='list-contacts'>
 	    		<div className='list-contacts-top'>
@@ -45,12 +52,11 @@ class ListContacts extends Component {
 	    				onChange={(event) => this.updateQuery(event.target.value)}
 	    			/>
 
-	    			<a 
-	    				href='#create' 
-	    				className='add-contact' 
-	    				onClick={this.props.onNavigate}>
+	    			<Link
+	    				to='/create' 
+	    				className='add-contact'> 
 	    				Add Contact
-	    			</a>
+	    			</Link>
 	    		</div>
 
 	    		{showingContacts.length !== contacts.length && (
